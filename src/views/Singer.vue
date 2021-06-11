@@ -6,7 +6,7 @@
 
 <script>
 import getSingerList from '@/service/singer'
-import IndexList from '@/components/index-list/IndexList'
+import IndexList from '@/components/base/index-list/IndexList'
 
 export default {
   name: 'Singer',
@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     loading() {
-      // 如果轮播图和热门列表没有数据的时候为 false
+      // 如果歌手数组没有数据的时候为 false
       return !this.singers.length
     },
   },

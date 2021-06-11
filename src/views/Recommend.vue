@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" v-loading:[loadingText]="loading">
     <scroll class="recommend-content">
       <div>
         <!-- 轮播图 -->
@@ -11,7 +11,7 @@
 
         <!-- 热门推荐列表 -->
         <div class="recommend-list">
-          <h1 class="list-title">热门歌单推荐</h1>
+          <h1 class="list-title" v-show="!loading">热门歌单推荐</h1>
           <ul>
             <li v-for="item in albums" :key="item.id" class="item">
               <div class="icon">
@@ -54,7 +54,15 @@ export default {
     return {
       sliders: [],
       albums: [],
+      loadingText: '正在加载...',
     }
+  },
+  // 计算属性有缓存，但依赖的数据改变的时候才会重新计算
+  computed: {
+    loading() {
+      // 如果轮播图和热门列表没有数据的时候为 false
+      return !this.sliders.length && !this.albums.length
+    },
   },
   // 实例创建后异步获取接口数据
   async created() {

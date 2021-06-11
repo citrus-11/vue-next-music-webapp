@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend" v-loading:[loadingText]="loading">
+  <div class="recommend" v-loading="loading">
     <scroll class="recommend-content">
       <div>
         <!-- 轮播图 -->
@@ -54,7 +54,6 @@ export default {
     return {
       sliders: [],
       albums: [],
-      loadingText: '正在加载...',
     }
   },
   // 计算属性有缓存，但依赖的数据改变的时候才会重新计算

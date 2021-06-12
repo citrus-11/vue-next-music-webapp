@@ -14,6 +14,7 @@ export default function useScroll(wrapperRef, options, emit) {
       ...options,
     }))
 
+    // 监听 滚动事件派发坐标
     if (options.probeType > 0) {
       scrollVal.on('scroll', pos => {
         emit('scroll', pos)
@@ -25,7 +26,5 @@ export default function useScroll(wrapperRef, options, emit) {
     scroll.value.destroy()
   })
 
-  return {
-    scroll,
-  }
+  return scroll
 }

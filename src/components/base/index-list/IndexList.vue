@@ -71,7 +71,6 @@ export default {
     } = useShortcut(props, groupRef)
 
     function onItemClick(item) {
-      console.log(111)
       emit('select', item)
     }
 

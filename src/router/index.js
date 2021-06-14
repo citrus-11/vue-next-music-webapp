@@ -16,6 +16,12 @@ const routes = [
   {
     path: '/singer',
     component: () => import('@/views/Singer'),
+    children: [
+      {
+        path: ':id',
+        component: () => import('@/views/SingerDetail'),
+      },
+    ],
   },
   {
     path: '/top-list',

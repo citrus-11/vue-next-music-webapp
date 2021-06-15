@@ -5,6 +5,17 @@
     </div>
     <h1 class="title">{{ title }}</h1>
     <div class="bg-image" :style="bgImageStyle" ref="bgImageRef">
+      <div class="play-btn-wrapper">
+        <div
+          class="play-btn"
+          :style="playBtnStyle"
+          v-show="songs.length > 0"
+          @click="random"
+        >
+          <i class="icon-play"></i>
+          <span class="text">随机播放全部</span>
+        </div>
+      </div>
       <div class="filter" :style="filterStyle" />
     </div>
     <scroll
@@ -16,7 +27,7 @@
       @scroll="onScroll"
     >
       <div class="song-list-wrapper">
-        <song-list :songs="songs" />
+        <song-list :songs="songs" @select="selectItem" />
       </div>
     </scroll>
   </div>
@@ -25,7 +36,9 @@
 <script>
 import SongList from '@/components/base/song-list/SongList'
 import Scroll from '@/components/base/scroll/Scroll'
+import { mapActions } from 'vuex'
 
+// 顶部栏高度
 const RESERVED_HEIGHT = 40
 
 export default {
@@ -46,6 +59,17 @@ export default {
     this.maxTranslateY = this.imageHeight - RESERVED_HEIGHT
   },
   computed: {
+    playBtnStyle() {
+      let display = ''
+
+      if (this.scrollY >= this.maxTranslateY) {
+        display = 'none'
+      }
+
+      return {
+        display,
+      }
+    },
     bgImageStyle() {
       const scrollY = this.scrollY
       let zIndex = 0
@@ -61,6 +85,7 @@ export default {
       }
 
       let scale = 1
+
       if (scrollY < 0) {
         scale = 1 + Math.abs(scrollY / this.imageHeight)
       }
@@ -121,6 +146,16 @@ export default {
     onScroll(pos) {
       this.scrollY = -pos.y
     },
+    selectItem({ index }) {
+      this.selectPlay({
+        list: this.songs,
+        index,
+      })
+    },
+    random() {
+      this.randomPlay(this.songs)
+    },
+    ...mapActions(['selectPlay', 'randomPlay']),
   },
 }
 </script>

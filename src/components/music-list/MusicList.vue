@@ -11,6 +11,7 @@
       class="list"
       :style="scrollStyle"
       v-loading="loading"
+      v-no-result:[noResultText]="noResult"
       :probe-type="3"
       @scroll="onScroll"
     >
@@ -94,6 +95,9 @@ export default {
         backdropFilter: `blur(${blur}px)`,
       }
     },
+    noResult() {
+      return !this.loading && !this.songs.length
+    },
   },
   props: {
     songs: {
@@ -105,6 +109,10 @@ export default {
     title: String,
     pic: String,
     loading: Boolean,
+    noResultText: {
+      type: String,
+      default: '抱歉，没有找到可播放的歌曲',
+    },
   },
   methods: {
     goBack() {

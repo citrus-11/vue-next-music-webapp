@@ -14,7 +14,7 @@
       <div class="bottom">
         <div class="operators">
           <div class="icon i-left">
-            <i class="icon-sequence"></i>
+            <i @click="changeMode" :class="modeIcon"></i>
           </div>
           <div class="icon i-left" :class="disableCls">
             <i @click="prev" class="icon-prev"></i>
@@ -38,16 +38,19 @@
 <script>
 import { useStore } from 'vuex'
 import { computed, watch, ref } from 'vue'
+import useMode from './use-mode'
 
 export default {
   name: 'Player',
   setup() {
+    // data
     const audioRef = ref(null)
-    const store = useStore()
 
     // 歌曲缓冲状态
     const songReady = ref(false)
 
+    // vuex
+    const store = useStore()
     // 全屏状态
     const fullScreen = computed(() => store.state.fullScreen)
 
@@ -63,6 +66,7 @@ export default {
     // 获取歌曲数组
     const playlist = computed(() => store.state.playlist)
 
+    // computed
     const disableCls = computed(() => {
       return songReady.value ? '' : 'disable'
     })
@@ -72,6 +76,7 @@ export default {
       return playing.value ? 'icon-pause' : 'icon-play'
     })
 
+    // watch
     // 监听当前歌曲变化，动态歌曲播放
     watch(currentSong, newSong => {
       if (!newSong.id || !newSong.url) {
@@ -96,6 +101,10 @@ export default {
       newPlaying ? audioEl.play() : audioEl.pause()
     })
 
+    // hooks
+    const { modeIcon, changeMode } = useMode()
+
+    // methods
     function goBack() {
       store.commit('setFullScreen', false)
     }
@@ -168,6 +177,7 @@ export default {
       songReady.value = true
     }
 
+    // 报错依然可以下一首
     function error() {
       songReady.value = true
     }
@@ -197,6 +207,9 @@ export default {
       ready,
       disableCls,
       error,
+      // mode
+      modeIcon,
+      changeMode,
     }
   },
 }

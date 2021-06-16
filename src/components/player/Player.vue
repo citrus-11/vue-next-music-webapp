@@ -11,8 +11,27 @@
         <h1 class="title">{{ currentSong.name }}</h1>
         <h2 class="subtitle">{{ currentSong.singer }}</h2>
       </div>
+      <div class="bottom">
+        <div class="operators">
+          <div class="icon i-left">
+            <i class="icon-sequence"></i>
+          </div>
+          <div class="icon i-left">
+            <i class="icon-prev"></i>
+          </div>
+          <div @click="togglePlay" class="icon i-center">
+            <i :class="playIcon"></i>
+          </div>
+          <div class="icon i-right">
+            <i class="icon-next"></i>
+          </div>
+          <div class="icon i-right">
+            <i class="icon-not-favorite"></i>
+          </div>
+        </div>
+      </div>
     </div>
-    <audio ref="audioRef" />
+    <audio ref="audioRef" @pause="pause" />
   </div>
 </template>
 
@@ -25,9 +44,22 @@ export default {
   setup() {
     const audioRef = ref(null)
     const store = useStore()
+
+    // 全屏状态
     const fullScreen = computed(() => store.state.fullScreen)
+
+    // 当前歌曲
     const currentSong = computed(() => store.getters.currentSong)
 
+    // 当前歌曲播放状态
+    const playing = computed(() => store.state.playing)
+
+    // 根据歌曲播放状态切换 icon
+    const playIcon = computed(() => {
+      return playing.value ? 'icon-pause' : 'icon-play'
+    })
+
+    // 监听当前歌曲变化，动态歌曲播放
     watch(currentSong, newSong => {
       if (!newSong.id || !newSong.url) {
         return
@@ -38,8 +70,23 @@ export default {
       audioEl.play()
     })
 
+    // 根据播放状态修改歌曲播放行为
+    watch(playing, newPlaying => {
+      const audioEl = audioRef.value
+      newPlaying ? audioEl.play() : audioEl.pause()
+    })
+
     function goBack() {
       store.commit('setFullScreen', false)
+    }
+
+    function togglePlay() {
+      store.commit('setPlayingState', !playing.value)
+    }
+
+    // 不是用户触发的暂停主动设置音乐播放状态
+    function pause() {
+      store.commit('setPlayingState', false)
     }
 
     return {
@@ -47,6 +94,9 @@ export default {
       fullScreen,
       currentSong,
       audioRef,
+      playIcon,
+      togglePlay,
+      pause,
     }
   },
 }

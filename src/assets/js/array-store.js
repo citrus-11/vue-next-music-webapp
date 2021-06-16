@@ -1,6 +1,6 @@
 import storage from 'good-storage'
 
-function inertArray(arr, val, compare, maxLen) {
+function insertArray(arr, val, compare, maxLen) {
   const index = arr.findIndex(compare)
   if (index === 0) {
     return
@@ -23,7 +23,7 @@ function deleteFromArray(arr, compare) {
 
 export function save(item, key, compare, maxLen) {
   const items = storage.get(key, [])
-  inertArray(items, item, compare, maxLen)
+  insertArray(items, item, compare, maxLen)
   storage.set(key, items)
   return items
 }

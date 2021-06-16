@@ -16,13 +16,13 @@
           <div class="icon i-left">
             <i class="icon-sequence"></i>
           </div>
-          <div class="icon i-left">
+          <div class="icon i-left" :class="disableCls">
             <i @click="prev" class="icon-prev"></i>
           </div>
-          <div class="icon i-center">
+          <div class="icon i-center" :class="disableCls">
             <i @click="togglePlay" :class="playIcon"></i>
           </div>
-          <div class="icon i-right">
+          <div class="icon i-right" :class="disableCls">
             <i @click="next" class="icon-next"></i>
           </div>
           <div class="icon i-right">
@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-    <audio ref="audioRef" @pause="pause" />
+    <audio ref="audioRef" @pause="pause" @canplay="ready" @error="error" />
   </div>
 </template>
 
@@ -44,6 +44,9 @@ export default {
   setup() {
     const audioRef = ref(null)
     const store = useStore()
+
+    // 歌曲缓冲状态
+    const songReady = ref(false)
 
     // 全屏状态
     const fullScreen = computed(() => store.state.fullScreen)
@@ -60,6 +63,10 @@ export default {
     // 获取歌曲数组
     const playlist = computed(() => store.state.playlist)
 
+    const disableCls = computed(() => {
+      return songReady.value ? '' : 'disable'
+    })
+
     // 根据歌曲播放状态切换 icon
     const playIcon = computed(() => {
       return playing.value ? 'icon-pause' : 'icon-play'
@@ -71,6 +78,8 @@ export default {
         return
       }
 
+      songReady.value = false
+
       const audioEl = audioRef.value
       audioEl.src = newSong.url
       audioEl.play()
@@ -78,6 +87,11 @@ export default {
 
     // 根据播放状态修改歌曲播放行为
     watch(playing, newPlaying => {
+      // 歌曲未准备好
+      if (!songReady.value) {
+        return
+      }
+
       const audioEl = audioRef.value
       newPlaying ? audioEl.play() : audioEl.pause()
     })
@@ -87,14 +101,17 @@ export default {
     }
 
     function togglePlay() {
+      if (!songReady.value) {
+        return
+      }
       store.commit('setPlayingState', !playing.value)
     }
 
     function prev() {
       const list = playlist.value
 
-      // 没有歌曲啥也不做
-      if (!list.length) {
+      // 没有歌曲，歌曲也没准备好，啥也不做
+      if (!songReady.value || !list.length) {
         return
       }
 
@@ -121,7 +138,7 @@ export default {
     function next() {
       const list = playlist.value
 
-      if (!list.length) {
+      if (!songReady.value || !list.length) {
         return
       }
 
@@ -140,6 +157,19 @@ export default {
           store.commit('setPlayingState', true)
         }
       }
+    }
+
+    // 当歌曲准备好
+    function ready() {
+      if (songReady.value) {
+        return
+      }
+
+      songReady.value = true
+    }
+
+    function error() {
+      songReady.value = true
     }
 
     // 循环播放
@@ -164,6 +194,9 @@ export default {
       pause,
       prev,
       next,
+      ready,
+      disableCls,
+      error,
     }
   },
 }

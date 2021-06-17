@@ -20,6 +20,7 @@ createApp(App)
   .use(store)
   .use(router)
   .use(lazyPlugin, {
+    // Loading 配置
     loading: require('@/assets/images/default.png'),
   })
   .directive('loading', loadingDirective)

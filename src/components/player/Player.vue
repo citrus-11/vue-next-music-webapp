@@ -13,8 +13,13 @@
         <h2 class="subtitle">{{ currentSong.singer }}</h2>
       </div>
 
-      <div class="middle">
-        <div class="middle-l">
+      <div
+        class="middle"
+        @touchstart.prevent="onMiddleTouchStart"
+        @touchmove.prevent="onMiddleTouchMove"
+        @touchend.prevent="onMiddleTouchEnd"
+      >
+        <div class="middle-l" :style="middleLStyle">
           <div class="cd-wrapper">
             <div class="cd" ref="cdRef">
               <img
@@ -30,7 +35,7 @@
           </div>
         </div>
 
-        <scroll class="middle-r" ref="lyricScrollRef">
+        <scroll class="middle-r" :style="middleRStyle" ref="lyricScrollRef">
           <div class="lyric-wrapper">
             <div v-if="currentLyric" ref="lyricListRef">
               <p
@@ -50,6 +55,10 @@
       </div>
 
       <div class="bottom">
+        <div class="dot-wrapper">
+          <span class="dot" :class="{ active: currentShow === 'cd' }" />
+          <span class="dot" :class="{ active: currentShow === 'lyric' }" />
+        </div>
         <div class="progress-wrapper">
           <span class="time time-l">{{ formatTime(currentTime) }}</span>
           <div class="progress-bar-wrapper">
@@ -110,6 +119,7 @@ import useMode from './use-mode'
 import useFavorite from './use-favorite'
 import useCd from './use-cd'
 import useLyric from './use-lyric'
+import useMiddleInteractive from './use-middle-interactive'
 
 export default {
   name: 'Player',
@@ -215,6 +225,14 @@ export default {
       songReady,
       currentTime,
     })
+    const {
+      currentShow,
+      middleLStyle,
+      middleRStyle,
+      onMiddleTouchStart,
+      onMiddleTouchMove,
+      onMiddleTouchEnd,
+    } = useMiddleInteractive()
 
     // methods
     function goBack() {
@@ -366,6 +384,13 @@ export default {
       ready,
       disableCls,
       error,
+      // middle-interactive
+      currentShow,
+      middleLStyle,
+      middleRStyle,
+      onMiddleTouchStart,
+      onMiddleTouchMove,
+      onMiddleTouchEnd,
       // mode
       modeIcon,
       changeMode,

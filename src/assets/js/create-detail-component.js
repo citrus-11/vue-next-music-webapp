@@ -1,4 +1,4 @@
-import MusicList from '@/components/music-list/music-list'
+import MusicList from '@/components/music-list/MusicList'
 import storage from 'good-storage'
 import { processSongs } from '@/service/song'
 

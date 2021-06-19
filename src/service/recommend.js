@@ -5,3 +5,10 @@ import { get } from './base'
 export default function getRecommend() {
   return get('/api/getRecommend')
 }
+
+// 获取推荐歌单
+export function getAlbum(album) {
+  return get('/api/getAlbum', {
+    id: album.id,
+  })
+}

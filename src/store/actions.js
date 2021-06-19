@@ -40,7 +40,7 @@ export function removeSong({ commit, state }, song) {
 
   const sequenceIndex = findIndex(sequenceList, song)
   const playIndex = findIndex(playlist, song)
-  if (playIndex < 0) return
+  if (sequenceIndex < 0 || playIndex < 0) return
 
   sequenceList.splice(sequenceIndex, 1)
   playlist.splice(playIndex, 1)

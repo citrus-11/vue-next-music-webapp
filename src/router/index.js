@@ -2,19 +2,22 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 // 异步组件
 const Recommend = () =>
-  import('@/views/Recommend' /* webpackChunkName: "recommend" */)
+  import('@/views/Recommend' /* webpackChunkName: "Recommend" */)
 
-const Singer = () => import('@/views/Singer' /* webpackChunkName: "singer" */)
+const Album = () => import('@/views/Album' /* webpackChunkName: "Album" */)
 
-const TopList = () =>
-  import('@/views/TopList' /* webpackChunkName: "top-list" */)
-
-const Search = () => import('@/views/Search' /* webpackChunkName: "search" */)
+const Singer = () => import('@/views/Singer' /* webpackChunkName: "Singer" */)
 
 const SingerDetail = () =>
-  import('@/views/SingerDetail' /* webpackChunkName: "singer-detail" */)
+  import('@/views/SingerDetail' /* webpackChunkName: "SingerDetail" */)
 
-const Album = () => import('@/views/Album' /* webpackChunkName: "album" */)
+const TopList = () =>
+  import('@/views/TopList' /* webpackChunkName: "TopList" */)
+
+const TopDetail = () =>
+  import('@/views/TopDetail' /* webpackChunkName: "TopDetail" */)
+
+const Search = () => import('@/views/Search' /* webpackChunkName: "Search" */)
 
 const routes = [
   {
@@ -48,6 +51,12 @@ const routes = [
   {
     path: '/top-list',
     component: TopList,
+    children: [
+      {
+        path: ':id',
+        component: TopDetail,
+      },
+    ],
   },
 ]
 

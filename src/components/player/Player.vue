@@ -1,5 +1,5 @@
 <template>
-  <div class="player">
+  <div class="player" v-show="playlist.length">
     <div class="normal-player" v-show="fullScreen">
       <div class="background">
         <img :src="currentSong.pic" />
@@ -63,6 +63,7 @@
           <span class="time time-l">{{ formatTime(currentTime) }}</span>
           <div class="progress-bar-wrapper">
             <progress-bar
+              ref="barRef"
               :progress="progress"
               @progress-changing="onProgressChanging"
               @progress-changed="onProgressChanged"
@@ -95,6 +96,7 @@
         </div>
       </div>
     </div>
+    <mini-player :progress="progress" :toggle-play="togglePlay" />
     <audio
       ref="audioRef"
       @pause="pause"
@@ -108,12 +110,13 @@
 
 <script>
 import { useStore } from 'vuex'
-import { computed, watch, ref } from 'vue'
+import { computed, watch, ref, nextTick } from 'vue'
 import { formatTime } from '@/assets/js/util'
 import { PLAY_MODE } from '@/assets/js/constant'
 // components
 import ProgressBar from './ProgressBar.vue'
 import Scroll from '@/components/base/scroll/Scroll'
+import MiniPlayer from './MiniPlayer.vue'
 // hooks
 import useMode from './use-mode'
 import useFavorite from './use-favorite'
@@ -126,10 +129,12 @@ export default {
   components: {
     ProgressBar,
     Scroll,
+    MiniPlayer,
   },
   setup() {
     // data
     const audioRef = ref(null)
+    const barRef = ref(null)
 
     // 歌曲缓冲状态
     const songReady = ref(false)
@@ -205,6 +210,14 @@ export default {
       } else {
         audioEl.pause()
         stopLyric()
+      }
+    })
+
+    watch(fullScreen, async newFullScreen => {
+      if (newFullScreen) {
+        // nextTick 拿到最新的 DOM
+        await nextTick()
+        barRef.value.setOffset(progress.value)
       }
     })
 
@@ -384,6 +397,8 @@ export default {
       ready,
       disableCls,
       error,
+      playlist,
+      barRef,
       // middle-interactive
       currentShow,
       middleLStyle,

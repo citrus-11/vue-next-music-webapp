@@ -51,7 +51,8 @@
 </template>
 
 <script>
-import Scroll from '@/components/base/scroll/Scroll'
+// 高阶组件，特定于业务
+import Scroll from '@/components/wrap-scroll'
 import Confirm from '@/components/base/confirm/Confirm'
 import { ref, computed, nextTick, watch } from 'vue'
 import { useStore } from 'vuex'

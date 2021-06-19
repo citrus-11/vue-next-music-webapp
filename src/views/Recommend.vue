@@ -42,7 +42,7 @@ import getRecommend from '@/service/recommend'
 import Slider from '@/components/base/slider/Slider'
 
 // 滚动组件
-import Scroll from '@/components/base/scroll/Scroll'
+import Scroll from '@/components/wrap-scroll'
 
 export default {
   name: 'Recommend',

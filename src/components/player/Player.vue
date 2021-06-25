@@ -132,6 +132,7 @@ import useCd from './use-cd'
 import useLyric from './use-lyric'
 import useMiddleInteractive from './use-middle-interactive'
 import useAnimation from './use-animation'
+import usePlayHistory from './use-play-history'
 
 export default {
   name: 'Player',
@@ -264,6 +265,8 @@ export default {
     const { cdWrapperRef, enter, afterEnter, leave, afterLeave } =
       useAnimation()
 
+    const { savePlay } = usePlayHistory()
+
     // methods
     function goBack() {
       store.commit('setFullScreen', false)
@@ -328,6 +331,8 @@ export default {
       songReady.value = true
 
       playLyric()
+
+      savePlay(currentSong.value)
     }
 
     // 报错依然可以下一首

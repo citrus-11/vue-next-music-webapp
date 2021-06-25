@@ -26,4 +26,5 @@ module.exports = {
       config.plugins.push(new BundleAnalyzerPlugin())
     }
   },
+  productionSourceMap: false, // 生产不需要打开sourceMap
 }

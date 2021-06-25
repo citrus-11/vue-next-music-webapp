@@ -19,6 +19,9 @@ const TopDetail = () =>
 
 const Search = () => import('@/views/Search' /* webpackChunkName: "Search" */)
 
+const UserCenter = () =>
+  import('@/views/UserCenter' /* webpackChunkName: "UserCenter" */)
+
 const routes = [
   {
     path: '/',
@@ -63,6 +66,12 @@ const routes = [
         component: TopDetail,
       },
     ],
+  },
+  {
+    path: '/user',
+    components: {
+      user: UserCenter,
+    },
   },
 ]
 

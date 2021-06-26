@@ -34,11 +34,11 @@ export default {
     text-align: center;
 
     .icon {
-      width: 86px;
-      height: 90px;
+      width: 60px;
+      height: 60px;
       margin: 0 auto;
       @include bg-image('no-result');
-      background-size: 86px 90px;
+      background-size: 60px 60px;
     }
 
     .text {

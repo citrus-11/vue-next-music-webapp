@@ -89,6 +89,10 @@ export default {
         flex: 0 0 100px;
         width: 100px;
         height: 100px;
+
+        img {
+          border-radius: 50% 0 0 50%;
+        }
       }
 
       .song-list {

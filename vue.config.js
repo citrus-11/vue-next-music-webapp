@@ -1,6 +1,12 @@
 const registerRouter = require('./backend/router')
 
 module.exports = {
+  pages: {
+    index: {
+      entry: 'src/main.js',
+      title: '青柠乐动',
+    },
+  },
   css: {
     loaderOptions: {
       scss: {
